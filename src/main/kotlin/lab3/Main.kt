@@ -1,0 +1,26 @@
+package lab3
+
+fun main(){
+    val shapeList: MutableList<Shape> = mutableListOf()
+    val factory: ShapeFactory = ShapeFactoryImpl()
+    shapeList.add(factory.createCircle(5.0))
+    shapeList.add(factory.createRandomCircle())
+    shapeList.add(factory.createSquare(10.0))
+    shapeList.add(factory.createRandomSquare())
+    shapeList.add(factory.createRectangle(5.0, 10.0))
+    shapeList.add(factory.createRandomRectangle())
+    shapeList.add(factory.createTriangle(5.0, 12.0, 13.0))
+    shapeList.add(factory.createRandomTriangle())
+    print("Sum of area: ${shapeList[0].calcArea()}")
+    for (i in 1 until shapeList.size step 1)
+        print(" + ${shapeList[i].calcArea()}")
+    print(" = ${shapeList.sumOf { it.calcArea() }}")
+    println("\nMax area: ${shapeList.maxOf { it.calcArea() }}")
+    println("Min area: ${shapeList.minOf { it.calcArea() }}")
+    print("Sum of perimeter: ${shapeList[0].calcPerimeter()}")
+    for (i in 1 until shapeList.size step 1)
+        print(" + ${shapeList[i].calcPerimeter()}")
+    print(" = ${shapeList.sumOf { it.calcPerimeter() }}")
+    println("\nMax area: ${shapeList.maxOf { it.calcPerimeter() }}")
+    println("Min area: ${shapeList.minOf { it.calcPerimeter() }}")
+}
