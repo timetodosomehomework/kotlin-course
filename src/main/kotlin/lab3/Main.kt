@@ -1,6 +1,6 @@
 package lab3
 
-fun main(){
+fun main() {
     val shapeList: MutableList<Shape> = mutableListOf()
     val factory: ShapeFactory = ShapeFactoryImpl()
     shapeList.add(factory.createCircle(5.0))
