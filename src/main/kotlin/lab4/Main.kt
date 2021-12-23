@@ -1,12 +1,20 @@
 package lab4
 
-fun main(){
-    var firstMatrix = Matrix(arrayOf(arrayOf(0.0, 1.0, 2.0),
-                                     arrayOf(3.0, 4.0, 5.0),
-                                     arrayOf(6.0, 7.0, 8.0)))
-    val secondMatrix = Matrix(arrayOf(arrayOf(6.0, 7.0, 8.0),
-                                      arrayOf(3.0, 4.0, 5.0),
-                                      arrayOf(0.0, 1.0, 2.0)))
+fun main() {
+    var firstMatrix = Matrix(
+        arrayOf(
+            arrayOf(0.0, 1.0, 2.0),
+            arrayOf(3.0, 4.0, 5.0),
+            arrayOf(6.0, 7.0, 8.0)
+        )
+    )
+    val secondMatrix = Matrix(
+        arrayOf(
+            arrayOf(6.0, 7.0, 8.0),
+            arrayOf(3.0, 4.0, 5.0),
+            arrayOf(0.0, 1.0, 2.0)
+        )
+    )
     println("${firstMatrix.numberOfLines()} * ${firstMatrix.numberOfColumns()}, ${secondMatrix.numberOfLines()} * ${secondMatrix.numberOfColumns()}")
     println("First matrix:\n$firstMatrix")
     println("Second matrix:\n$secondMatrix")
