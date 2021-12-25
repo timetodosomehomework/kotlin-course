@@ -12,7 +12,7 @@ interface Shape {
 }
 
 class Circle(
-    var radius: Double = 0.0
+    val radius: Double = 0.0
 ) : Shape {
 
     init {
@@ -30,7 +30,7 @@ class Circle(
 }
 
 class Square(
-    var side: Double = 0.0
+    val side: Double = 0.0
 ) : Shape {
 
     init {
@@ -48,8 +48,8 @@ class Square(
 }
 
 class Rectangle(
-    var sideA: Double = 0.0,
-    var sideB: Double = 0.0
+    val sideA: Double = 0.0,
+    val sideB: Double = 0.0
 ) : Shape {
     init {
         if (sideA <= 0 || sideB <= 0)
@@ -66,9 +66,9 @@ class Rectangle(
 }
 
 class Triangle(
-    var sideA: Double = 0.0,
-    var sideB: Double = 0.0,
-    var sideC: Double = 0.0
+    val sideA: Double = 0.0,
+    val sideB: Double = 0.0,
+    val sideC: Double = 0.0
 ) : Shape {
 
     init {
