@@ -131,7 +131,7 @@ class Library(
     }
 
     override fun getBookStatus(book: Book): Status {
-        return books[book] ?: throw IllegalArgumentException("There is no such book in the library")
+        return books[book] ?: throw NoSuchObjectException("There is no such book in the library") // throwed if we tried to invoke method (set) of non-existing object (entity of map)
     }
 
     override fun getAllBookStatuses(): Map<Book, Status> {
@@ -139,7 +139,7 @@ class Library(
     }
 
     override fun setBookStatus(book: Book, status: Status) {
-        books[book] ?: throw IllegalArgumentException("There is no such book in the library")
+        books[book] ?: throw NoSuchObjectException("There is no such book in the library") // throwed if we tried to invoke method (set) of non-existing object (entity of map)
         books[book] = status
     }
 
@@ -166,12 +166,12 @@ class Library(
         for (i in users.indices)
             if (users[i] == user)
                 return users[i]
-        throw NoSuchObjectException("There is no such user")
+        throw IllegalArgumentException("There is no such user")
     }
 
     override fun takeBook(user: User, book: Book) {
         if (user !in users)
-            throw NoSuchObjectException("User isn't registered")
+            throw IllegalArgumentException("User isn't registered")
         if (getBookStatus(book) == Status.Available && books.values.filter { status -> status is Status.UsedBy && status.user == user }.size < maxNumberOfBooks) {
             books[book] = Status.UsedBy(user)
         } else
