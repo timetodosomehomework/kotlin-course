@@ -3,10 +3,24 @@ package lab5
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
+
 internal class LibraryTest {
 
     private val library = Library()
     private val book = Book("Властелин колец", listOf(Author("Джордж Р.М.", "Мартин")), Genre.EPICNOVEL, 1955)
+
+    @Test
+    fun constructor() {
+        val map = mapOf<Book, Status>(book to Status.UsedBy(User("Максим", "Ковалевский")))
+        val users = listOf(User("Вася", "Пупкин"))
+        val usersCorrect = listOf(User("Максим", "Ковалевский"))
+        assertDoesNotThrow {
+            val library2 = Library(map, usersCorrect)
+        }
+        assertThrows(Exception::class.java) {
+            val library2 = Library(map, users)
+        }
+    }
 
     @Test
     fun addBook() {

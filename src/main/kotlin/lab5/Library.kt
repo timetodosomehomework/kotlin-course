@@ -12,6 +12,7 @@ enum class Genre {
 }
 
 const val maxNumberOfBooks = 3
+const val yearOfFirstPublishedBook = 868
 
 data class Book(
     val name: String,
@@ -24,7 +25,7 @@ data class Book(
             throw IllegalArgumentException("Book must have a title")
         if (author.isEmpty())
             throw IllegalArgumentException("Book must have at least one author")
-        if (year > LocalDate.now().year || year < 868)
+        if (year > LocalDate.now().year || year < yearOfFirstPublishedBook)
             throw IllegalArgumentException("Wrong publishing year")
     }
 }
@@ -89,91 +90,75 @@ class Library(
     private val users: MutableList<User> = mutableListOf()
 
     init {
-        for (pair in booksOriginal)
-            books.plus(pair.toPair())
-        for (i in usersOriginal.indices)
-            users.add(i, usersOriginal[i])
+        for ((_, v) in booksOriginal) {
+            if (v != Status.Available && v != Status.ComingSoon && v != Status.Restoration) {
+                var flag = true
+                for (i in usersOriginal)
+                    if (v == Status.UsedBy(i)) {
+                        flag = false
+                        break
+                    }
+                if (flag)
+                    throw IllegalArgumentException("Book is used by unregistered user")
+            }
+        }
+        books.putAll(booksOriginal)
+        users.addAll(usersOriginal)
     }
 
     override fun findBooks(substring: String): List<Book> {
-        var matching: List<Book> = mutableListOf()
-        for ((k) in books)
-            if (k.name.contains(substring))
-                matching = matching.plus(k)
-        return matching
+        return books.keys.filter { book -> book.name.contains(substring) }
     }
 
     override fun findBooks(author: List<Author>): List<Book> {
-        var matching: List<Book> = mutableListOf()
-        for ((k) in books) {
-            if (k.author == author)
-                matching = matching.plus(k)
-        }
-        return matching
+        return books.keys.filter { book -> book.author == author }
     }
 
     override fun findBooks(year: Int): List<Book> {
-        var matching: List<Book> = mutableListOf()
-        for ((k) in books)
-            if (k.year == year)
-                matching = matching.plus(k)
-        return matching
+        return books.keys.filter { book -> book.year == year }
     }
 
     override fun findBooks(genre: Genre): List<Book> {
-        var matching: List<Book> = mutableListOf()
-        for ((k) in books)
-            if (k.genre == genre)
-                matching = matching.plus(k)
-        return matching
+        return books.keys.filter { book -> book.genre == genre }
     }
 
     override fun getAllBooks(): List<Book> {
-        var matching: List<Book> = mutableListOf()
-        for ((k) in books)
-            matching = matching.plus(k)
-        return matching
+        return books.keys.toList()
     }
 
     override fun getAllAvailableBooks(): List<Book> {
-        var matching: List<Book> = mutableListOf()
-        for ((k, v) in books)
-            if (v == Status.Available)
-                matching = matching.plus(k)
-        return matching
+        return books.filter { (_, v) -> v == Status.Available }.keys.toList()
     }
 
     override fun getBookStatus(book: Book): Status {
-        for ((k, v) in books)
-            if (k == book)
-                return v
-        throw NoSuchObjectException("There is no such book in the library")
+        return books[book] ?: throw IllegalArgumentException("There is no such book in the library")
     }
 
     override fun getAllBookStatuses(): Map<Book, Status> {
-        var statuses: Map<Book, Status> = mutableMapOf()
-        for (pair in books)
-            statuses = statuses.plus(pair.toPair())
-        return statuses
+        return books
     }
 
     override fun setBookStatus(book: Book, status: Status) {
-        for ((k) in books)
-            if (k == book) {
-                books[k] = status
-            }
+        books[book] ?: throw IllegalArgumentException("There is no such book in the library")
+        books[book] = status
     }
 
     override fun addBook(book: Book, status: Status) {
-        books += Pair(book, status)
+        books[book] = status
     }
 
     override fun registerUser(firstName: String, lastName: String) {
-        users += User(firstName, lastName)
+        if (!users.contains(User(firstName, lastName)))
+            users.add(User(firstName, lastName))
+        else
+            throw IllegalArgumentException("User is already registered")
     }
 
     override fun unregisterUser(user: User) {
-        users.remove(user)
+        if (users.contains(user))
+            users.remove(user)
+        else
+            throw IllegalArgumentException("User has never been registered")
     }
 
     override fun getUser(firstName: String, lastName: String): User {
